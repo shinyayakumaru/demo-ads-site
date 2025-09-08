@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Demo Ads - 広告パフォーマンス管理システムのデモサイト">
+    <title>Demo Ads - 広告パフォーマンス管理</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 100px auto;
+        }
+
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .login-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+        .welcome-text {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .download-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .download-btn {
+            background: #28a745;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin: 10px;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+        }
+
+        .download-btn.detail {
+            background: #6f42c1;
+        }
+
+        .download-btn.detail:hover {
+            background: #5a32a3;
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #c82333;
+        }
+
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .data-table {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .demo-info {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .demo-info strong {
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .login-container {
+                margin: 50px auto;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- デモ情報 -->
+    <div class="demo-info">
+        <strong>🚀 GitHub Pages デモサイト</strong> | ログイン情報: ID = <strong>admin</strong>, パスワード = <strong>admin</strong>
+    </div>
+
+    <!-- ログイン画面 -->
+    <div id="loginPage" class="login-page">
+        <div class="login-container">
+            <div class="login-form">
+                <h2>Demo Ads ログイン</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">ユーザーID</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">パスワード</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="login-btn" id="loginButton">ログイン</button>
+                    <div class="error-message" id="errorMessage">
+                        ユーザーIDまたはパスワードが間違っています
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ダッシュボード画面 -->
+    <div id="dashboardPage" class="dashboard">
+        <div class="container">
+            <div class="header">
+                <div class="logo">Demo Ads</div>
+                <button class="logout-btn" id="logoutButton">ログアウト</button>
+            </div>
+
+            <div class="welcome-text">
+                <h2>広告パフォーマンス ダッシュボード</h2>
+                <p>こちらは広告キャンペーンのパフォーマンス指標を確認・ダウンロードできるデモサイトです。</p>
+                <p><small>📅 最終更新: <span id="lastUpdate"></span></small></p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>総インプレッション</h3>
+                    <div class="stat-value">1,234,567</div>
+                </div>
+                <div class="stat-card">
+                    <h3>総クリック数</h3>
+                    <div class="stat-value">45,678</div>
+                </div>
+                <div class="stat-card">
+                    <h3>平均CTR</h3>
+                    <div class="stat-value">3.7%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>総コンバージョン</h3>
+                    <div class="stat-value">2,345</div>
+                </div>
+            </div>
+
+            <div class="data-table">
+                <h3>キャンペーン一覧</h3>
+                <table id="campaignTable">
+                    <thead>
+                        <tr>
+                            <th>キャンペーン名</th>
+                            <th>インプレッション</th>
+                            <th>クリック数</th>
+                            <th>CTR</th>
+                            <th>CPC</th>
+                            <th>コンバージョン</th>
+                            <th>費用</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>春のセールキャンペーン</td>
+                            <td>456,789</td>
+                            <td>16,890</td>
+                            <td>3.7%</td>
+                            <td>¥125</td>
+                            <td>856</td>
+                            <td>¥2,111,250</td>
+                        </tr>
+                        <tr>
+                            <td>新商品プロモーション</td>
+                            <td>234,567</td>
+                            <td>8,945</td>
+                            <td>3.8%</td>
+                            <td>¥98</td>
+                            <td>445</td>
+                            <td>¥876,610</td>
+                        </tr>
+                        <tr>
+                            <td>ブランド認知向上</td>
+                            <td>543,211</td>
+                            <td>19,843</td>
+                            <td>3.7%</td>
+                            <td>¥87</td>
+                            <td>1,044</td>
+                            <td>¥1,726,341</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="download-section">
+                <h3>レポートダウンロード</h3>
+                <p>広告パフォーマンスデータをCSVファイルでダウンロードできます</p>
+                <button class="download-btn" id="downloadCsvButton">
+                    📊 CSVファイルをダウンロード
+                </button>
+                <button class="download-btn detail" id="downloadDetailCsvButton">
+                    📈 詳細レポートをダウンロード
+                </button>
+                <p><small>💡 ヒント: ダウンロードしたファイルはExcelで開けます</small></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ログイン状態の管理
+        let isLoggedIn = false;
+
+        // DOM要素の取得
+        const loginPage = document.getElementById('loginPage');
+        const dashboardPage = document.getElementById('dashboardPage');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const logoutButton = document.getElementById('logoutButton');
+        const downloadCsvButton = document.getElementById('downloadCsvButton');
+        const downloadDetailCsvButton = document.getElementById('downloadDetailCsvButton');
+
+        // ページロード時の処理
+        document.addEventListener('DOMContentLoaded', function() {
+            showLogin();
+            updateLastUpdateTime();
+        });
+
+        // 最終更新時刻を表示
+        function updateLastUpdateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('ja-JP');
+            const lastUpdateElement = document.getElementById('lastUpdate');
+            if (lastUpdateElement) {
+                lastUpdateElement.textContent = timeString;
+            }
+        }
+
+        // ログイン処理
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            // 認証チェック
+            if (username === 'admin' && password === 'admin') {
+                isLoggedIn = true;
+                showDashboard();
+                errorMessage.style.display = 'none';
+                updateLastUpdateTime();
+            } else {
+                errorMessage.style.display = 'block';
+                // パスワードフィールドをクリア
+                document.getElementById('password').value = '';
+            }
+        });
+
+        // ログアウト処理
+        logoutButton.addEventListener('click', function() {
+            isLoggedIn = false;
+            showLogin();
+            // フォームをクリア
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            errorMessage.style.display = 'none';
+        });
+
+        // 画面表示切り替え
+        function showDashboard() {
+            loginPage.style.display = 'none';
+            dashboardPage.style.display = 'block';
+        }
+
+        function showLogin() {
+            loginPage.style.display = 'block';
+            dashboardPage.style.display = 'none';
+        }
+
+        // CSVダウンロード機能
+        function downloadCSV(filename, data) {
+            // BOMを追加してExcelで日本語が正しく表示されるようにする
+            const bom = '\uFEFF';
+            const blob = new Blob([bom + data], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                link.setAttribute('download', filename);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // 基本CSVデータの生成
+        function generateBasicCSV() {
+            const headers = ['日付', 'キャンペーン名', 'インプレッション', 'クリック数', 'CTR', 'CPC', 'コンバージョン', '費用'];
+            const data = [
+                ['2024-09-01', '春のセールキャンペーン', '45678', '1689', '3.7%', '125', '85', '211125'],
+                ['2024-09-01', '新商品プロモーション', '23456', '894', '3.8%', '98', '44', '87661'],
+                ['2024-09-01', 'ブランド認知向上', '54321', '1984', '3.7%', '87', '104', '172634'],
+                ['2024-09-02', '春のセールキャンペーン', '47892', '1755', '3.7%', '128', '89', '224640'],
+                ['2024-09-02', '新商品プロモーション', '25123', '967', '3.8%', '102', '48', '98634'],
+                ['2024-09-02', 'ブランド認知向上', '55678', '2045', '3.7%', '89', '108', '182005'],
+                ['2024-09-03', '春のセールキャンペーン', '46234', '1690', '3.7%', '122', '86', '206180'],
+                ['2024-09-03', '新商品プロモーション', '24789', '945', '3.8%', '95', '47', '89775'],
+                ['2024-09-03', 'ブランド認知向上', '53912', '1978', '3.7%', '85', '102', '168130']
+            ];
+
+            let csv = headers.join(',') + '\n';
+            data.forEach(row => {
+                csv += row.join(',') + '\n';
+            });
+
+            return csv;
+        }
+
+        // 詳細CSVデータの生成
+        function generateDetailCSV() {
+            const headers = [
+                '日付', 'キャンペーンID', 'キャンペーン名', 'デバイス', '地域',
+                'インプレッション', 'クリック数', 'CTR', 'CPC', 'CPM',
+                'コンバージョン', 'コンバージョン率', 'CPA', '費用', '収益'
+            ];
+            
+            const data = [
+                ['2024-09-01', 'CMP001', '春のセールキャンペーン', 'デスクトップ', '東京', '15678', '589', '3.8%', '125', '1680', '29', '4.9%', '2558', '73625', '145000'],
+                ['2024-09-01', 'CMP001', '春のセールキャンペーン', 'モバイル', '東京', '20456', '756', '3.7%', '128', '1840', '38', '5.0%', '2429', '96768', '190000'],
+                ['2024-09-01', 'CMP001', '春のセールキャンペーン', 'タブレット', '東京', '9544', '344', '3.6%', '120', '1920', '18', '5.2%', '2298', '41280', '90000'],
+                ['2024-09-01', 'CMP002', '新商品プロモーション', 'デスクトップ', '大阪', '8956', '345', '3.9%', '98', '1450', '17', '4.9%', '2010', '33810', '85000'],
+                ['2024-09-01', 'CMP002', '新商品プロモーション', 'モバイル', '大阪', '12345', '456', '3.7%', '102', '1580', '23', '5.0%', '1956', '46512', '115000'],
+                ['2024-09-01', 'CMP002', '新商品プロモーション', 'タブレット', '大阪', '2155', '93', '4.3%', '95', '1650', '4', '4.3%', '2212', '8835', '20000'],
+                ['2024-09-02', 'CMP001', '春のセールキャンペーン', 'デスクトップ', '東京', '16234', '612', '3.8%', '128', '1720', '31', '5.1%', '2645', '78336', '155000'],
+                ['2024-09-02', 'CMP001', '春のセールキャンペーン', 'モバイル', '東京', '21123', '789', '3.7%', '125', '1890', '39', '4.9%', '2398', '98625', '195000'],
+                ['2024-09-02', 'CMP002', '新商品プロモーション', 'デスクトップ', '名古屋', '9123', '356', '3.9%', '100', '1480', '18', '5.1%', '2055', '35600', '90000']
+            ];
+
+            let csv = headers.join(',') + '\n';
+            data.forEach(row => {
+                csv += row.join(',') + '\n';
+            });
+
+            return csv;
+        }
+
+        // CSVダウンロードイベント
+        downloadCsvButton.addEventListener('click', function() {
+            if (!isLoggedIn) {
+                alert('ログインが必要です');
+                return;
+            }
+            
+            const csvData = generateBasicCSV();
+            const today = new Date().toISOString().split('T')[0];
+            downloadCSV(`ads_performance_${today}.csv`, csvData);
+        });
+
+        downloadDetailCsvButton.addEventListener('click', function() {
+            if (!isLoggedIn) {
+                alert('ログインが必要です');
+                return;
+            }
+            
+            const csvData = generateDetailCSV();
+            const today = new Date().toISOString().split('T')[0];
+            downloadCSV(`ads_detail_report_${today}.csv`, csvData);
+        });
+
+        // Enterキーでログイン
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loginForm.dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
+</body>
+</html>
