@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Demo Ads - 広告パフォーマンス管理システムのデモサイト">
-    <title>Demo Ads - 広告パフォーマンス管理</title>
+    <title>Demo Ads - RPA対応版</title>
     <style>
         * {
             margin: 0;
@@ -19,27 +18,28 @@
             color: #333;
         }
 
+        /* RPA対応: 常に表示される要素 */
+        .rpa-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 9999;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
 
-        .header {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #667eea;
+        /* ログイン画面のスタイル */
+        .login-page {
+            display: block; /* RPA対応: 初期状態で表示 */
         }
 
         .login-container {
@@ -57,6 +57,7 @@
             color: #333;
         }
 
+        /* RPA対応: 明確なフォーム要素 */
         .form-group {
             margin-bottom: 20px;
         }
@@ -82,7 +83,8 @@
             border-color: #667eea;
         }
 
-        .login-btn {
+        /* RPA対応: ボタンを常に表示・クリック可能 */
+        .btn-login {
             width: 100%;
             background: #667eea;
             color: white;
@@ -92,14 +94,52 @@
             font-size: 16px;
             cursor: pointer;
             transition: background 0.3s;
+            opacity: 1 !important;
+            visibility: visible !important;
         }
 
-        .login-btn:hover {
+        .btn-login:hover {
             background: #5a6fd8;
         }
 
-        .dashboard {
-            display: none;
+        /* ダッシュボード画面 */
+        .dashboard-page {
+            display: none; /* RPA対応: 初期状態で非表示 */
+        }
+
+        .dashboard-page.show {
+            display: block; /* RPA対応: 表示クラス */
+        }
+
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .btn-logout {
+            background: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #c82333;
         }
 
         .welcome-text {
@@ -123,11 +163,6 @@
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-2px);
         }
 
         .stat-card h3 {
@@ -149,7 +184,7 @@
             text-align: center;
         }
 
-        .download-btn {
+        .btn-download {
             background: #28a745;
             color: white;
             padding: 15px 30px;
@@ -161,37 +196,30 @@
             margin: 10px;
         }
 
-        .download-btn:hover {
+        .btn-download:hover {
             background: #218838;
         }
 
-        .download-btn.detail {
+        .btn-download-detail {
             background: #6f42c1;
         }
 
-        .download-btn.detail:hover {
+        .btn-download-detail:hover {
             background: #5a32a3;
         }
 
-        .logout-btn {
-            background: #dc3545;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .logout-btn:hover {
-            background: #c82333;
-        }
-
+        /* RPA対応: エラーメッセージを常に配置 */
         .error-message {
             color: #dc3545;
             text-align: center;
             margin-top: 10px;
-            display: none;
+            min-height: 20px; /* RPA対応: 常に高さを確保 */
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .error-message.show {
+            opacity: 1;
         }
 
         .data-table {
@@ -223,98 +251,130 @@
             background-color: #f5f5f5;
         }
 
-        .demo-info {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            border-left: 4px solid #667eea;
-        }
-
-        .demo-info strong {
-            color: #667eea;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .header {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .login-container {
-                margin: 50px auto;
-                padding: 30px 20px;
-            }
+        /* RPA対応: ステータス表示 */
+        .rpa-debug {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 9999;
+            max-width: 300px;
         }
     </style>
 </head>
 <body>
-    <!-- デモ情報 -->
-    <div class="demo-info">
-        <strong>🚀 GitHub Pages デモサイト</strong> | ログイン情報: ID = <strong>admin</strong>, パスワード = <strong>admin</strong>
+    <!-- RPA対応: ステータス表示 -->
+    <div class="rpa-status" id="rpaStatus">
+        RPA Ready - Login Page Loaded
+    </div>
+
+    <!-- RPA対応: デバッグ情報 -->
+    <div class="rpa-debug" id="rpaDebug">
+        Current State: LOGIN_PAGE<br>
+        Elements Loaded: ✓
     </div>
 
     <!-- ログイン画面 -->
-    <div id="loginPage" class="login-page">
+    <div id="loginPage" class="login-page" data-testid="login-page">
         <div class="login-container">
             <div class="login-form">
                 <h2>Demo Ads ログイン</h2>
-                <form id="loginForm">
+                
+                <!-- RPA対応: データ属性とnameを追加 -->
+                <form id="loginForm" data-testid="login-form">
                     <div class="form-group">
                         <label for="username">ユーザーID</label>
-                        <input type="text" id="username" name="username" required>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            data-testid="username-input"
+                            placeholder="ユーザーIDを入力"
+                            required
+                        >
                     </div>
                     <div class="form-group">
                         <label for="password">パスワード</label>
-                        <input type="password" id="password" name="password" required>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            data-testid="password-input"
+                            placeholder="パスワードを入力"
+                            required
+                        >
                     </div>
-                    <button type="submit" class="login-btn" id="loginButton">ログイン</button>
-                    <div class="error-message" id="errorMessage">
+                    
+                    <!-- RPA対応: 複数の方法でボタンを特定可能 -->
+                    <button 
+                        type="button" 
+                        id="loginButton"
+                        class="btn-login" 
+                        data-testid="login-button"
+                        onclick="handleLogin()"
+                    >
+                        ログイン
+                    </button>
+                    
+                    <!-- RPA対応: エラーメッセージを常に配置 -->
+                    <div 
+                        id="errorMessage" 
+                        class="error-message" 
+                        data-testid="error-message"
+                        role="alert"
+                    >
                         ユーザーIDまたはパスワードが間違っています
                     </div>
                 </form>
+                
+                <!-- RPA対応: テスト情報表示 -->
+                <div style="margin-top: 20px; text-align: center; color: #666; font-size: 14px;">
+                    <p><strong>テストアカウント:</strong></p>
+                    <p>ID: <code>admin</code> / Pass: <code>admin</code></p>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- ダッシュボード画面 -->
-    <div id="dashboardPage" class="dashboard">
+    <div id="dashboardPage" class="dashboard-page" data-testid="dashboard-page">
         <div class="container">
             <div class="header">
                 <div class="logo">Demo Ads</div>
-                <button class="logout-btn" id="logoutButton">ログアウト</button>
+                <button 
+                    id="logoutButton"
+                    class="btn-logout" 
+                    data-testid="logout-button"
+                    onclick="handleLogout()"
+                >
+                    ログアウト
+                </button>
             </div>
 
             <div class="welcome-text">
                 <h2>広告パフォーマンス ダッシュボード</h2>
-                <p>こちらは広告キャンペーンのパフォーマンス指標を確認・ダウンロードできるデモサイトです。</p>
-                <p><small>📅 最終更新: <span id="lastUpdate"></span></small></p>
+                <p>ログインに成功しました。RPAテスト用のダッシュボードです。</p>
+                <p><small>最終ログイン: <span id="lastLoginTime"></span></small></p>
             </div>
 
             <div class="stats-grid">
-                <div class="stat-card">
+                <div class="stat-card" data-testid="stat-impressions">
                     <h3>総インプレッション</h3>
                     <div class="stat-value">1,234,567</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-testid="stat-clicks">
                     <h3>総クリック数</h3>
                     <div class="stat-value">45,678</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-testid="stat-ctr">
                     <h3>平均CTR</h3>
                     <div class="stat-value">3.7%</div>
                 </div>
-                <div class="stat-card">
+                <div class="stat-card" data-testid="stat-conversions">
                     <h3>総コンバージョン</h3>
                     <div class="stat-value">2,345</div>
                 </div>
@@ -322,7 +382,7 @@
 
             <div class="data-table">
                 <h3>キャンペーン一覧</h3>
-                <table id="campaignTable">
+                <table data-testid="campaign-table">
                     <thead>
                         <tr>
                             <th>キャンペーン名</th>
@@ -335,7 +395,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr data-testid="campaign-row-1">
                             <td>春のセールキャンペーン</td>
                             <td>456,789</td>
                             <td>16,890</td>
@@ -344,7 +404,7 @@
                             <td>856</td>
                             <td>¥2,111,250</td>
                         </tr>
-                        <tr>
+                        <tr data-testid="campaign-row-2">
                             <td>新商品プロモーション</td>
                             <td>234,567</td>
                             <td>8,945</td>
@@ -353,7 +413,7 @@
                             <td>445</td>
                             <td>¥876,610</td>
                         </tr>
-                        <tr>
+                        <tr data-testid="campaign-row-3">
                             <td>ブランド認知向上</td>
                             <td>543,211</td>
                             <td>19,843</td>
@@ -368,91 +428,175 @@
 
             <div class="download-section">
                 <h3>レポートダウンロード</h3>
-                <p>広告パフォーマンスデータをCSVファイルでダウンロードできます</p>
-                <button class="download-btn" id="downloadCsvButton">
-                    📊 CSVファイルをダウンロード
+                <p>広告パフォーマンスデータをCSVファイルでダウンロード</p>
+                <button 
+                    id="downloadCsvButton"
+                    class="btn-download" 
+                    data-testid="download-csv-button"
+                    onclick="downloadBasicCsv()"
+                >
+                    📊 CSVダウンロード
                 </button>
-                <button class="download-btn detail" id="downloadDetailCsvButton">
-                    📈 詳細レポートをダウンロード
+                <button 
+                    id="downloadDetailCsvButton"
+                    class="btn-download btn-download-detail" 
+                    data-testid="download-detail-csv-button"
+                    onclick="downloadDetailCsv()"
+                >
+                    📈 詳細レポート
                 </button>
-                <p><small>💡 ヒント: ダウンロードしたファイルはExcelで開けます</small></p>
             </div>
         </div>
     </div>
 
     <script>
-        // ログイン状態の管理
-        let isLoggedIn = false;
+        // RPA対応: グローバル状態管理
+        window.rpaState = {
+            currentPage: 'LOGIN',
+            isLoggedIn: false,
+            lastAction: 'PAGE_LOADED',
+            timestamp: new Date().toISOString()
+        };
 
-        // DOM要素の取得
-        const loginPage = document.getElementById('loginPage');
-        const dashboardPage = document.getElementById('dashboardPage');
-        const loginForm = document.getElementById('loginForm');
-        const errorMessage = document.getElementById('errorMessage');
-        const logoutButton = document.getElementById('logoutButton');
-        const downloadCsvButton = document.getElementById('downloadCsvButton');
-        const downloadDetailCsvButton = document.getElementById('downloadDetailCsvButton');
-
-        // ページロード時の処理
-        document.addEventListener('DOMContentLoaded', function() {
-            showLogin();
-            updateLastUpdateTime();
-        });
-
-        // 最終更新時刻を表示
-        function updateLastUpdateTime() {
-            const now = new Date();
-            const timeString = now.toLocaleString('ja-JP');
-            const lastUpdateElement = document.getElementById('lastUpdate');
-            if (lastUpdateElement) {
-                lastUpdateElement.textContent = timeString;
-            }
+        // RPA対応: 状態更新関数
+        function updateRpaStatus(status, debugInfo) {
+            document.getElementById('rpaStatus').textContent = status;
+            document.getElementById('rpaDebug').innerHTML = debugInfo;
+            window.rpaState.lastAction = status;
+            window.rpaState.timestamp = new Date().toISOString();
+            console.log('[RPA DEBUG]', status, window.rpaState);
         }
 
-        // ログイン処理
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
+        // RPA対応: ページロード完了
+        document.addEventListener('DOMContentLoaded', function() {
+            updateRpaStatus(
+                'RPA Ready - All Elements Loaded',
+                'Current State: LOGIN_PAGE<br>Username Field: ✓<br>Password Field: ✓<br>Login Button: ✓'
+            );
+        });
+
+        // RPA対応: ログイン処理
+        function handleLogin() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
             
-            // 認証チェック
-            if (username === 'admin' && password === 'admin') {
-                isLoggedIn = true;
-                showDashboard();
-                errorMessage.style.display = 'none';
-                updateLastUpdateTime();
-            } else {
-                errorMessage.style.display = 'block';
-                // パスワードフィールドをクリア
-                document.getElementById('password').value = '';
-            }
-        });
+            updateRpaStatus(
+                'Processing Login...',
+                `Username: "${username}"<br>Password: "${password ? '***' : 'empty'}"<br>Validating...`
+            );
 
-        // ログアウト処理
-        logoutButton.addEventListener('click', function() {
-            isLoggedIn = false;
-            showLogin();
-            // フォームをクリア
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-            errorMessage.style.display = 'none';
-        });
+            // 短い遅延でリアルなログイン処理をシミュレート
+            setTimeout(() => {
+                if (username === 'admin' && password === 'admin') {
+                    // ログイン成功
+                    window.rpaState.isLoggedIn = true;
+                    window.rpaState.currentPage = 'DASHBOARD';
+                    
+                    showDashboard();
+                    hideError();
+                    
+                    // 最終ログイン時刻を更新
+                    document.getElementById('lastLoginTime').textContent = 
+                        new Date().toLocaleString('ja-JP');
+                    
+                    updateRpaStatus(
+                        'Login Successful - Dashboard Loaded',
+                        'Current State: DASHBOARD<br>Login Status: ✓ SUCCESS<br>All Dashboard Elements: ✓'
+                    );
+                } else {
+                    // ログイン失敗
+                    showError();
+                    document.getElementById('password').value = ''; // パスワードクリア
+                    
+                    updateRpaStatus(
+                        'Login Failed - Invalid Credentials',
+                        'Current State: LOGIN_PAGE<br>Login Status: ✗ FAILED<br>Error Message: ✓ DISPLAYED'
+                    );
+                }
+            }, 500); // 0.5秒の遅延
+        }
 
-        // 画面表示切り替え
+        // RPA対応: ログアウト処理
+        function handleLogout() {
+            updateRpaStatus('Processing Logout...', 'Logging out...');
+            
+            setTimeout(() => {
+                window.rpaState.isLoggedIn = false;
+                window.rpaState.currentPage = 'LOGIN';
+                
+                showLogin();
+                clearForm();
+                hideError();
+                
+                updateRpaStatus(
+                    'Logout Successful - Login Page Restored',
+                    'Current State: LOGIN_PAGE<br>Form: ✓ CLEARED<br>Ready for next login'
+                );
+            }, 300);
+        }
+
+        // RPA対応: 画面表示制御
         function showDashboard() {
-            loginPage.style.display = 'none';
-            dashboardPage.style.display = 'block';
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('dashboardPage').classList.add('show');
         }
 
         function showLogin() {
-            loginPage.style.display = 'block';
-            dashboardPage.style.display = 'none';
+            document.getElementById('loginPage').style.display = 'block';
+            document.getElementById('dashboardPage').classList.remove('show');
         }
 
-        // CSVダウンロード機能
+        // RPA対応: エラー表示制御
+        function showError() {
+            document.getElementById('errorMessage').classList.add('show');
+        }
+
+        function hideError() {
+            document.getElementById('errorMessage').classList.remove('show');
+        }
+
+        // RPA対応: フォームクリア
+        function clearForm() {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        }
+
+        // RPA対応: Enterキーサポート
+        document.getElementById('username').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('password').focus();
+            }
+        });
+
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                handleLogin();
+            }
+        });
+
+        // RPA対応: CSVダウンロード機能
+        function downloadBasicCsv() {
+            updateRpaStatus('Generating CSV...', 'Creating basic performance report...');
+            
+            const csvData = generateBasicCSV();
+            const today = new Date().toISOString().split('T')[0];
+            downloadCSV(`ads_performance_${today}.csv`, csvData);
+            
+            updateRpaStatus('CSV Downloaded Successfully', 'File: ads_performance_' + today + '.csv<br>Status: ✓ COMPLETED');
+        }
+
+        function downloadDetailCsv() {
+            updateRpaStatus('Generating Detail CSV...', 'Creating detailed performance report...');
+            
+            const csvData = generateDetailCSV();
+            const today = new Date().toISOString().split('T')[0];
+            downloadCSV(`ads_detail_report_${today}.csv`, csvData);
+            
+            updateRpaStatus('Detail CSV Downloaded Successfully', 'File: ads_detail_report_' + today + '.csv<br>Status: ✓ COMPLETED');
+        }
+
+        // CSV生成・ダウンロード関数（前回と同じ）
         function downloadCSV(filename, data) {
-            // BOMを追加してExcelで日本語が正しく表示されるようにする
             const bom = '\uFEFF';
             const blob = new Blob([bom + data], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -469,30 +613,21 @@
             }
         }
 
-        // 基本CSVデータの生成
         function generateBasicCSV() {
             const headers = ['日付', 'キャンペーン名', 'インプレッション', 'クリック数', 'CTR', 'CPC', 'コンバージョン', '費用'];
             const data = [
                 ['2024-09-01', '春のセールキャンペーン', '45678', '1689', '3.7%', '125', '85', '211125'],
                 ['2024-09-01', '新商品プロモーション', '23456', '894', '3.8%', '98', '44', '87661'],
-                ['2024-09-01', 'ブランド認知向上', '54321', '1984', '3.7%', '87', '104', '172634'],
-                ['2024-09-02', '春のセールキャンペーン', '47892', '1755', '3.7%', '128', '89', '224640'],
-                ['2024-09-02', '新商品プロモーション', '25123', '967', '3.8%', '102', '48', '98634'],
-                ['2024-09-02', 'ブランド認知向上', '55678', '2045', '3.7%', '89', '108', '182005'],
-                ['2024-09-03', '春のセールキャンペーン', '46234', '1690', '3.7%', '122', '86', '206180'],
-                ['2024-09-03', '新商品プロモーション', '24789', '945', '3.8%', '95', '47', '89775'],
-                ['2024-09-03', 'ブランド認知向上', '53912', '1978', '3.7%', '85', '102', '168130']
+                ['2024-09-01', 'ブランド認知向上', '54321', '1984', '3.7%', '87', '104', '172634']
             ];
 
             let csv = headers.join(',') + '\n';
             data.forEach(row => {
                 csv += row.join(',') + '\n';
             });
-
             return csv;
         }
 
-        // 詳細CSVデータの生成
         function generateDetailCSV() {
             const headers = [
                 '日付', 'キャンペーンID', 'キャンペーン名', 'デバイス', '地域',
@@ -502,53 +637,40 @@
             
             const data = [
                 ['2024-09-01', 'CMP001', '春のセールキャンペーン', 'デスクトップ', '東京', '15678', '589', '3.8%', '125', '1680', '29', '4.9%', '2558', '73625', '145000'],
-                ['2024-09-01', 'CMP001', '春のセールキャンペーン', 'モバイル', '東京', '20456', '756', '3.7%', '128', '1840', '38', '5.0%', '2429', '96768', '190000'],
-                ['2024-09-01', 'CMP001', '春のセールキャンペーン', 'タブレット', '東京', '9544', '344', '3.6%', '120', '1920', '18', '5.2%', '2298', '41280', '90000'],
-                ['2024-09-01', 'CMP002', '新商品プロモーション', 'デスクトップ', '大阪', '8956', '345', '3.9%', '98', '1450', '17', '4.9%', '2010', '33810', '85000'],
-                ['2024-09-01', 'CMP002', '新商品プロモーション', 'モバイル', '大阪', '12345', '456', '3.7%', '102', '1580', '23', '5.0%', '1956', '46512', '115000'],
-                ['2024-09-01', 'CMP002', '新商品プロモーション', 'タブレット', '大阪', '2155', '93', '4.3%', '95', '1650', '4', '4.3%', '2212', '8835', '20000'],
-                ['2024-09-02', 'CMP001', '春のセールキャンペーン', 'デスクトップ', '東京', '16234', '612', '3.8%', '128', '1720', '31', '5.1%', '2645', '78336', '155000'],
-                ['2024-09-02', 'CMP001', '春のセールキャンペーン', 'モバイル', '東京', '21123', '789', '3.7%', '125', '1890', '39', '4.9%', '2398', '98625', '195000'],
-                ['2024-09-02', 'CMP002', '新商品プロモーション', 'デスクトップ', '名古屋', '9123', '356', '3.9%', '100', '1480', '18', '5.1%', '2055', '35600', '90000']
+                ['2024-09-01', 'CMP001', '春のセールキャンペーン', 'モバイル', '東京', '20456', '756', '3.7%', '128', '1840', '38', '5.0%', '2429', '96768', '190000']
             ];
 
             let csv = headers.join(',') + '\n';
             data.forEach(row => {
                 csv += row.join(',') + '\n';
             });
-
             return csv;
         }
 
-        // CSVダウンロードイベント
-        downloadCsvButton.addEventListener('click', function() {
-            if (!isLoggedIn) {
-                alert('ログインが必要です');
-                return;
-            }
-            
-            const csvData = generateBasicCSV();
-            const today = new Date().toISOString().split('T')[0];
-            downloadCSV(`ads_performance_${today}.csv`, csvData);
-        });
+        // RPA対応: デバッグ用のグローバル関数
+        window.getRpaState = function() {
+            return window.rpaState;
+        };
 
-        downloadDetailCsvButton.addEventListener('click', function() {
-            if (!isLoggedIn) {
-                alert('ログインが必要です');
-                return;
+        window.simulateUserInput = function(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.value = value;
+                element.dispatchEvent(new Event('input', { bubbles: true }));
+                element.dispatchEvent(new Event('change', { bubbles: true }));
+                return true;
             }
-            
-            const csvData = generateDetailCSV();
-            const today = new Date().toISOString().split('T')[0];
-            downloadCSV(`ads_detail_report_${today}.csv`, csvData);
-        });
+            return false;
+        };
 
-        // Enterキーでログイン
-        document.getElementById('password').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                loginForm.dispatchEvent(new Event('submit'));
+        window.simulateClick = function(elementId) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.click();
+                return true;
             }
-        });
+            return false;
+        };
     </script>
 </body>
 </html>
